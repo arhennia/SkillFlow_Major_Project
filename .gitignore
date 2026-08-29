@@ -1,3 +1,37 @@
+# =============================================================================
+# Project-specific ignores — Customer Churn Prediction ML Project
+# =============================================================================
+
+# Dataset (download separately — see data/README.md)
+data/*.csv
+data/*.xlsx
+data/*.json
+
+# Generated model artifacts (re-created by src/train_and_export.py)
+# Comment out these lines if you want to commit pre-trained models for reviewers.
+# models/*.pkl
+# models/*.joblib
+
+# Generated output CSVs (re-created on each training run)
+models/model_comparison.csv
+models/sample_predictions.csv
+models/top10_feature_importance.csv
+
+# Generated report and presentation (re-created by src/generate_*.py)
+# reports/*.pdf
+# presentation/*.pptx
+
+# Generated notebook plot images (re-created by src/build_notebook.py)
+notebooks/plot_*.png
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints/
+notebooks/.ipynb_checkpoints/
+
+# =============================================================================
+# Standard Python ignores
+# =============================================================================
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
