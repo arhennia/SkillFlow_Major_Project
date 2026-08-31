@@ -51,15 +51,13 @@ def code(text):
 # TITLE
 # =====================================================================
 md("""\
-# Customer Churn Prediction & Intelligent Retention System
+# Customer Churn Prediction Project
 
-**Objective:** Build an end-to-end machine learning pipeline that predicts
-which telecom customers are likely to churn, and translate model findings
-into an actionable retention strategy.
+**My Objective:** I wanted to build a complete machine learning project to predict which telecom customers might leave us (churn). Then, I'll use what the model learned to come up with ideas to keep them.
 
-**Dataset:** IBM Telco Customer Churn (7,043 customers, 21 raw attributes).
+**Dataset Used:** IBM Telco Customer Churn (I'm looking at 7,043 customers and 21 different features).
 
-**Sections**
+**What I did in this notebook:**
 1. Data Loading & Exploratory Data Analysis (EDA)
 2. Data Preprocessing & Feature Engineering
 3. Model Development & Hyperparameter Tuning
@@ -93,11 +91,11 @@ plt.rcParams["font.size"] = 10
 pd.set_option("display.max_columns", None)
 
 # Resolve paths relative to the notebook's location
-NOTEBOOK_DIR = os.path.dirname(os.path.abspath("__file__")) if "__file__" in dir() else os.getcwd()
-PROJECT_ROOT = os.path.dirname(NOTEBOOK_DIR)
+current_dir = os.getcwd()
+PROJECT_ROOT = os.path.dirname(current_dir) if os.path.basename(current_dir) == "notebooks" else current_dir
 DATA_PATH = os.path.join(PROJECT_ROOT, "data", "Telco-Customer-Churn.csv")
 MODELS_DIR = os.path.join(PROJECT_ROOT, "models")
-PLOTS_DIR = NOTEBOOK_DIR  # plots saved alongside the notebook
+PLOTS_DIR = os.path.join(PROJECT_ROOT, "notebooks")
 """)
 
 md("### 1.1 Load Raw Data")
@@ -109,13 +107,9 @@ df_raw.head()
 """)
 
 md("""\
-### 1.2 Data Hygiene: the `TotalCharges` edge case
+### 1.2 Cleaning the Data: fixing `TotalCharges`
 
-The IBM Telco dataset stores `TotalCharges` as a **string** column, and 11
-brand-new customers (all with `tenure == 0`) have a **blank space `" "`**
-instead of a numeric value, since they haven't been billed yet. We coerce
-this column to numeric and impute the blanks with `0` (their true
-lifetime spend to date).
+While exploring the dataset, I noticed `TotalCharges` was saved as a **string** instead of a number. Also, there were 11 brand-new customers (where `tenure == 0`) that just had a **blank space `" "`** because they hadn't been billed yet. So, I decided to convert this column to a numeric format and fill those blanks with `0` since they basically haven't spent anything yet.
 """)
 
 code("""\
@@ -285,27 +279,14 @@ plt.show()
 """)
 
 md("""\
-### 1.10 Key Business Insights from EDA
+### 1.10 What I found out from the Data (My Insights)
 
-1. **Contract type is the single strongest churn driver.** Month-to-month
-   customers churn at a dramatically higher rate than one- or two-year
-   contract holders, since there's no switching-cost friction keeping
-   them in place.
-2. **Tenure and churn are inversely related.** Churn risk is heavily
-   concentrated in the first ~12 months; customers who make it past year
-   one are substantially more likely to stay long-term.
-3. **Electronic check payers churn disproportionately more** than
-   customers on automatic bank transfer or automatic credit card, likely
-   because manual payment correlates with lower engagement/commitment.
-4. **Fiber optic internet customers churn more than DSL customers**
-   despite (or because of) paying higher monthly charges — a signal of
-   a possible price/value or service-reliability perception gap.
-5. **Customers without add-on services (Online Security, Tech Support,
-   etc.) churn more.** Add-ons appear to increase "stickiness," likely
-   because they raise switching costs and perceived value.
-6. **High monthly charges correlate with higher churn**, especially when
-   combined with short tenure and month-to-month contracts — this
-   combination represents the highest-risk customer segment.
+1. **Contract type really matters.** I saw that customers on month-to-month contracts leave way more often than those on yearly contracts. It makes sense because they can leave anytime without penalty.
+2. **Newer customers are at higher risk.** A lot of people seem to churn in their first year. If we can keep them past the first 12 months, they usually stay longer.
+3. **Payment method plays a role.** People paying by electronic checks churned a lot more compared to those on automatic payments. Maybe they're just less engaged?
+4. **Fiber optic vs DSL:** Interestingly, Fiber optic users churned more than DSL users, even though it's supposed to be better. It could be because it's more expensive or maybe there are service issues.
+5. **Add-on services help keep customers.** Customers who didn't have extra services like Tech Support or Online Security were more likely to leave. It seems like having these add-ons makes them right at home.
+6. **High bills lead to churn.** Higher monthly charges generally mean higher churn, especially for newer customers on flexible contracts. This group is definitely the highest risk.
 """)
 
 # =====================================================================
@@ -314,10 +295,9 @@ md("""\
 md("## 2. Data Preprocessing & Feature Engineering")
 
 md("""\
-### 2.1 Feature Engineering
+### 2.1 Making New Features (Feature Engineering)
 
-We create four new features designed to capture engagement, value, and
-risk signals not directly present in the raw schema:
+I wanted to extract more value from the data, so I created four new features to better capture customer behavior and risk:
 
 | Feature | Description |
 |---|---|
@@ -363,14 +343,14 @@ plt.show()
 """)
 
 md("""\
-### 2.2 Encoding & Scaling
+### 2.2 Preparing the Data for Models
 
-- **Target**: `Churn` binary-encoded (`Yes` → 1, `No` → 0)
-- **Binary features** (`Partner`, `Dependents`, `PaperlessBilling`): mapped to 0/1
-- **Nominal features** (`PaymentMethod`, `InternetService`, etc.): one-hot encoded (`drop_first=True`)
-- **Continuous numeric features** (`tenure`, `MonthlyCharges`, `TotalCharges`,
-  `Total_Services_Used`, `Estimated_LTV`): standard-scaled
-- **Train/Test Split**: 80/20, stratified on `Churn`, `random_state=42`
+Before I could train any models, I needed to get the data in the right format:
+- **Target**: I changed `Churn` to numbers (`Yes` → 1, `No` → 0)
+- **Yes/No features**: Mapped things like `Partner` and `Dependents` to 0/1
+- **Categorical features**: I used one-hot encoding for columns like `PaymentMethod`
+- **Number features**: I used standard scaling for continuous things like `tenure` and `MonthlyCharges` so they're on the same scale.
+- **Splitting the data**: I did a standard 80/20 train/test split, making sure to stratify the `Churn` target so the proportions stay the same in both sets.
 """)
 
 code("""\
@@ -483,17 +463,14 @@ pd.DataFrame(results)
 """)
 
 md("""\
-### 3.3 Hyperparameter Optimization
+### 3.3 Tuning the Models
 
-We apply two complementary tuning strategies:
+To get the best performance, I tried to find the best hyperparameters. I used two different approaches based on my experience:
 
-- **`GridSearchCV`** on Decision Tree — exhaustively searches every parameter
-  combination; practical here because the Decision Tree search space is small.
-- **`RandomizedSearchCV`** on Random Forest and XGBoost — samples `n_iter`
-  random parameter combinations from the grid; essential for large search
-  spaces where exhaustive search would be prohibitively slow.
+- **`GridSearchCV`** for the Decision Tree. Since the search space isn't too huge, I let it check every single combination.
+- **`RandomizedSearchCV`** for Random Forest and XGBoost. These models have way too many parameters, so testing every combination would take forever. Randomized search is a great shortcut that still finds good parameters quickly.
 
-Both use 5-fold **Stratified** cross-validation, optimizing for **ROC-AUC**.
+For both, I used 5-fold cross-validation and optimized for **ROC-AUC**.
 """)
 
 code("""\
@@ -545,11 +522,9 @@ print("Best XGB CV ROC-AUC:", round(xgb_search.best_score_, 4))
 """)
 
 md("""\
-### 3.3c GridSearchCV — Decision Tree (Exhaustive Search)
+### 3.3c Grid Search on Decision Tree
 
-`GridSearchCV` evaluates **every** combination in the parameter grid, making
-it ideal for smaller models. Here we tune the Decision Tree, whose compact
-search space (5×3×3×2 = 90 fits) makes exhaustive search feasible.
+Like I mentioned, I used `GridSearchCV` here to check all 90 possible combinations. It's totally doable for a simpler model like this one!
 """)
 
 code("""\
@@ -679,43 +654,22 @@ print("Saved top10_feature_importance.csv to models/")
 """)
 
 md("""\
-### 4.5 Cost-Benefit & Error Analysis
+### 4.5 Thinking about Errors (Cost-Benefit Analysis)
 
-In a churn-prediction system, the two error types carry **very different
-business costs**:
+When dealing with churn, I realized that making a mistake isn't equally bad in both directions:
 
-- **False Positive** (predicting churn for a customer who would have
-  stayed): the cost is a *wasted retention incentive* — a discount,
-  courtesy call, or promotional offer given to someone who didn't need
-  it. This is a small, bounded, recoverable cost.
-- **False Negative** (failing to predict churn for a customer who
-  actually leaves): the cost is the **entire lost customer lifetime
-  value** — recurring monthly revenue, plus the higher cost of acquiring
-  a replacement customer. This is a large, often unrecoverable cost.
+- **False Positive** (saying someone will churn when they won't): The cost here is just a wasted discount or a phone call. It's not a big deal.
+- **False Negative** (missing a real churner): This is the bad one. If we fail to spot someone leaving, we lose all their future revenue and have to spend a lot to acquire a new customer to replace them.
 
-Because a missed churner (False Negative) is typically far more
-expensive than an unnecessary retention offer (False Positive), **Recall**
-(the ability to catch as many true churners as possible) is prioritized
-over raw Accuracy. **ROC-AUC** is used as the primary model-selection
-metric because it evaluates ranking quality across *all* classification
-thresholds, letting the business tune the operating threshold
-(e.g., who gets a retention call) independently of model training —
-which is essential on this dataset's moderately imbalanced target
-(~26.5% churn rate), where Accuracy alone can be misleadingly high by
-simply predicting the majority class.
+Because missing a churner is way more expensive, I focused heavily on **Recall** (catching as many actual churners as possible). I used **ROC-AUC** to pick the best model overall because it helps rank the risk well, allowing us to decide later exactly who gets the retention offers.
 """)
 
 md("""\
-## Conclusion
+## My Final Conclusion
 
-The tuned **XGBoost** model (or the current run's selected champion,
-printed above) delivers the strongest combination of ROC-AUC and Recall,
-making it the most business-appropriate choice for flagging at-risk
-customers. The top features driving churn — contract type, tenure,
-payment method, and monthly charges — map directly onto concrete,
-actionable retention levers, which are detailed in the accompanying
-executive report (`reports/Business_and_Technical_Report.pdf`) and
-slide deck (`presentation/Churn_Prediction_Presentation.pptx`).
+After all this testing, my tuned **XGBoost** model (or whatever ended up as the champion above) gave me the best balance of ROC-AUC and Recall. I think it's the best choice for our business to flag customers who might leave. 
+
+Looking at the feature importances, the main things driving churn are the contract type, how long they've been with us, how they pay, and their monthly bills. We can actually do something about these! I've detailed my recommendations in the accompanying report (`reports/Business_and_Technical_Report.pdf`) and the presentation (`presentation/Churn_Prediction_Presentation.pptx`).
 """)
 
 # =====================================================================
