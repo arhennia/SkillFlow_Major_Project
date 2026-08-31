@@ -1,0 +1,13 @@
+{
+  "champion_model": "XGBoost (Tuned)",
+  "metrics": {
+    "Model": "XGBoost (Tuned)",
+    "Accuracy": 0.741,
+    "Precision": 0.5075,
+    "Recall": 0.8155,
+    "F1-Score": 0.6256,
+    "ROC-AUC": 0.8456
+  },
+  "n_features": 36,
+  "trained_at": "2026-08-31 22:44:47"
+}
