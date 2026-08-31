@@ -89,7 +89,7 @@ styles.add(ParagraphStyle(
 ))
 styles.add(ParagraphStyle(
     "BodyJustify", parent=styles["Normal"], fontSize=9.7, leading=13.5,
-    alignment=TA_JUSTIFY, spaceAfter=6,
+    alignment=TA_JUSTIFY, spaceAfter=4,
 ))
 styles.add(ParagraphStyle(
     "BulletText", parent=styles["Normal"], fontSize=10, leading=14, spaceAfter=4,
@@ -158,7 +158,7 @@ def make_feature_importance_table(df: pd.DataFrame) -> Table:
 def bullets(items):
     return ListFlowable(
         [ListItem(Paragraph(t, styles["BulletText"]), leftIndent=6) for t in items],
-        bulletType="bullet", start="circle", leftIndent=14, spaceBefore=2, spaceAfter=8,
+        bulletType="bullet", start="circle", leftIndent=14, spaceBefore=2, spaceAfter=4,
     )
 
 
@@ -296,7 +296,7 @@ story.append(Paragraph(
 ))
 
 # ===== Retention Strategies & Conclusion (flows onto page 3) =====
-story.append(Spacer(1, 4))
+story.append(Spacer(1, 2))
 story.append(Paragraph("5 Actionable Retention Strategies", styles["SectionHeading"]))
 
 strategy_data = [
@@ -331,7 +331,7 @@ for title, desc in strategy_data:
     story.append(Paragraph(title, styles["SubHeading"]))
     story.append(Paragraph(desc, styles["BodyJustify"]))
 
-story.append(Spacer(1, 8))
+story.append(Spacer(1, 4))
 story.append(Paragraph("Strategic Conclusion", styles["SectionHeading"]))
 story.append(Paragraph(
     f"The {champion_name} model provides the business with a reliable, "
@@ -346,7 +346,7 @@ story.append(Paragraph(
     "model as customer behavior and market conditions evolve.", styles["BodyJustify"],
 ))
 
-story.append(Spacer(1, 20))
+story.append(Spacer(1, 8))
 story.append(section_divider())
 story.append(Paragraph(
     f"Report generated automatically from model artifacts (trained "
