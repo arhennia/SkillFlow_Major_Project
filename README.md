@@ -1,6 +1,6 @@
 # Customer Churn Prediction & Intelligent Retention System
 
-> **Machine Learning Internship — Major Project**  
+> **My Machine Learning Internship — Major Project**  
 > IBM Telco Customer Churn Dataset · End-to-End ML Pipeline
 
 ---
@@ -23,13 +23,13 @@
 
 ## Project Overview
 
-This project builds a complete, production-ready machine learning pipeline to **predict customer churn** for a subscription-based telecom company.
+I built this complete machine learning pipeline to **predict customer churn** for a telecom company. 
 
-**The problem:** ~26.5% of customers churn, representing a significant recurring revenue loss. Retention campaigns applied reactively — after a customer has decided to leave — are too late to be effective.
+**The problem:** About 26.5% of customers churn, which means a huge loss in recurring revenue. Trying to keep them after they've already decided to leave is just too late.
 
-**The solution:** A supervised ML model that assigns every customer a quantified churn probability score, enabling the business to intervene proactively with targeted retention offers.
+**The solution:** I developed a supervised ML model that assigns a churn probability score to every customer. This helps the business step in early with targeted retention offers.
 
-**Dataset:** [IBM Telco Customer Churn](https://www.kaggle.com/datasets/blastchar/telco-customer-churn) — 7,043 customers, 21 attributes spanning demographics, subscription details, billing, and service usage.
+**Dataset Used:** [IBM Telco Customer Churn](https://www.kaggle.com/datasets/blastchar/telco-customer-churn) — 7,043 customers and 21 features covering demographics, billing, and usage.
 
 ---
 
