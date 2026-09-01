@@ -31,6 +31,7 @@ MODELS_DIR = os.path.join(_PROJECT_ROOT, "models")
 ADDON_SERVICE_COLS = [
     "OnlineSecurity", "OnlineBackup", "DeviceProtection",
     "TechSupport", "StreamingTV", "StreamingMovies",
+    
 ]
 
 # Binary Yes/No columns (excluding target) that get simple 0/1 mapping
